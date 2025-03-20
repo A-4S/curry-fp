@@ -26,8 +26,8 @@ jobs:
         pip install pipx
         pipx ensurepath
         pipx install poetry
-        eval `poetry env activate`
         poetry install
     - name: Test with pytest
       run: |
+        eval `poetry env activate`
         pytest
