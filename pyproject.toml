@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "curry-py"
+version = "1.0.0"
+description = ""
+authors = ["A-4S <dev.forsythe@gmail.com>"]
+keywords = [
+    "python",
+    "fp",
+    "utility"
+]
+readme = "README.md"
+packages = [{include = "currypy", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
