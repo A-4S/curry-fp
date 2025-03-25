@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "curry-py"
-version = "1.2.0"
+version = "1.2.1"
 description = "Functional currying in Python. 🥘"
 license = "MIT"
 authors = ["A-4S <dev.forsythe@gmail.com>"]
