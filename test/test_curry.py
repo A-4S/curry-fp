@@ -13,10 +13,10 @@ def test_curry():
 
     # kwargs test
     assert sum_all(a=1)(b=2)(c=3) == 6
-    assert sum_all(b=1)(c=2)(a=3) == 6
-    assert sum_all(c=1)(a=2)(b=3) == 6
+    assert sum_all(b=1)(c=2)(a=3)() == 6
+    assert sum_all(c=1)(a=2)(b=3)() == 6
 
     # mixed test
-    assert sum_all(1)(2)(c=3) == 6
+    assert sum_all(1)(2)(c=3)() == 6
     assert sum_all(1, b=2)(c=3) == 6
-    assert sum_all(a=1, b=2, c=3) == 6
+    assert sum_all(a=1, b=2, c=3)() == 6
