@@ -1,81 +1,39 @@
-from functools import partial, wraps
-from inspect import signature, getcallargs, getfullargspec
+from functools import partial, reduce
+from inspect import signature, getargs
 from typing import Callable
 
 
-def curry(f: Callable):
+def curry(f: Callable | partial):
     """
     Creates a new and curryable function from a Callable.
     """
-
-    def count_args(f: partial, *args, **kwargs):
-        # print(signature(f))
-        
-        match isinstance(f, partial):
-            case True:
-                # print(f"args: {f.args}, kwargs: {f.keywords}")
-
-                return len(f.args) + len(f.keywords)
-            case False:
-                # print(f"args: {args}, kwargs: {kwargs}") 
-
-                return len(args) + len(kwargs)
     
-    def examine(f: Callable, *args, **kwargs):
-        part = partial(f, *args, **kwargs)
-        spec = getfullargspec(part)
+    def count_args(f: Callable | partial, *args, **kwargs):
+        def count_items(*args):
+            return reduce(lambda a, c: a + len(c), args, 0)
 
-        print(f"args: {spec.args}")
-        print(f"kwonlyargs: {spec.kwonlyargs}")
-        print(f"kwonlydefaults: {spec.kwonlydefaults}")
-        print(f"signature: {signature(partial(f, *args, **kwargs))}")
+        return count_items(f.args, f.keywords) if hasattr(f, 'args') else count_items(args, kwargs)
     
-    def check_args(f: Callable, *args, **kwargs):
-        part = partial(f, *args, **kwargs)
-        spec = getfullargspec(part)
+    def apply_defaults(f: partial):
+        def filter_args(f: partial):
+            return filter(lambda x: x != ..., f.args)
 
-        examine(f, *args, **kwargs)
+        sig = signature(f.func)
+        ba = sig.bind_partial(*filter_args(f), **f.keywords)
 
-        # check = True if len(spec.args) == 0 and (len(spec.kwonlyargs) == len(spec.kwonlydefaults)) else False
+        return ba.apply_defaults() or partial(f.func, *ba.args, **ba.kwargs)
 
-        match spec.kwonlydefaults:
-            case None:
-                check = True if len(spec.args) == 0 else False
-            case _:
-                check = True if len(spec.args) == 0 and len(spec.kwonlyargs) == len(spec.kwonlydefaults) else False
-        
-        match len(spec.args) == 0:
-            case True:
-                match len(spec.kwonlyargs) == len(spec.kwonlydefaults):
-                    case True:
-                        return partial(f, *args, **kwargs)
-
-        print(check)
-        print('==============')
-
-        return check
-
-    # @wraps(f)
     def wrapper(*args, **kwargs):
-        # if check_args(f, *args, **kwargs) == True:
-        #     match getfullargspec(partial(f, *args, **kwargs)).kwonlydefaults:
-        #         case None:
-        #             return f(*args, **kwargs)
-        #         case _:
-        #             return partial(f, *args, **kwargs)
-
-        # spec = getfullargspec(partial(f, *args, **kwargs))
-
-        # match spec.defaults:
-        #     case None:
-        #         match len(spec.args) == 0:
-        #             case True:
-        #                 return f(*args, **kwargs)
-
-        def apply_defaults(f: Callable, *args, **kwargs):
-            params = signature(f).parameters
-
-
-        return curry(partial(f, *args, **kwargs))
+        def is_base_case(f: partial, *args, **kwargs):
+            return len(getargs(f.func.__code__)) == count_args(f, *args, **kwargs)
+        
+        f_a = partial(f, *args, **kwargs)
+        f_b = apply_defaults(f_a) if ... in args else f_a
+        
+        match is_base_case(f_b, *args, **kwargs):
+            case True:
+                return f_b()
+            case False:
+                return curry(f_b)
 
     return wrapper
