@@ -8,16 +8,9 @@ def curry(f: Callable | partial):
     Creates a new and curryable function from a Callable.
     """
     
-    def count_args(f: Callable | partial, *args, **kwargs):
-        def count_items(*args):
-            return reduce(lambda a, c: a + len(c), args, 0)
-        
-        match hasattr(f, 'args'):
-            case True:
-                return count_items(f.args, f.keywords)
-            case False:
-                return count_items(args, kwargs)
-    
+    def count_args(f: partial):
+        return reduce(lambda a, c: a + len(c), (f.args, f.keywords), 0)
+
     def apply_defaults(f: partial):
         def filter_args(f: partial):
             return filter(lambda x: x != ..., f.args)
@@ -31,19 +24,19 @@ def curry(f: Callable | partial):
         return partial_with_defaults(f, bind_args(f))
 
     def wrapper(*args, **kwargs):
-        def is_base_case(f: partial, *args, **kwargs):
-            return len(getargs(f.func.__code__)) == count_args(f, *args, **kwargs)
+        def is_base_case(f: partial):
+            return len(getargs(f.func.__code__)) == count_args(f)
         
         def select_default_args(f: partial, *args):
             return apply_defaults(f) if ... in args else f
 
-        def case_result(f: partial, *args, **kwargs):        
-            match is_base_case(f, *args, **kwargs):
+        def case_result(f: partial):        
+            match is_base_case(f):
                 case True:
                     return f()
                 case False:
                     return curry(f)
         
-        return case_result(select_default_args(partial(f, *args, **kwargs), *args), *args, **kwargs)
+        return case_result(select_default_args(partial(f, *args, **kwargs), *args))
 
     return wrapper
