@@ -12,6 +12,7 @@ def curry(f: Union[Callable, partial]):
 
     ## Example
     .. code-block:: python
+        @curry
         def sum_all(a: int, b: int=2, c: int=3) -> int:
             return a + b + c       
 
