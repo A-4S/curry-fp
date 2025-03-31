@@ -7,7 +7,7 @@ Simple ⬦ Clear ⬦ Concise
 
 ---
 ## Background
-Currying is a technique targeting strategic code composition, breaking apart a function into a series of functions, for allowing arguments to be applied piece-by-piece until all parameters are fulfilled.
+Currying is a technique targeting strategic code composition, breaking apart a function into a series of functions, allowing arguments to be applied piece-by-piece until all parameters are fulfilled.
 
 ## Usage
 Curry fp is a powerful tool that can be used as a decorator on Callable objects for the purpose of currying.
