@@ -1,4 +1,4 @@
-from currypy import curry
+from curry_fp import curry
 
 
 def test_curry():
