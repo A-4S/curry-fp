@@ -47,7 +47,7 @@ def curry(f: Union[Callable, partial]):
         def is_base_case(f: partial):
             return count_co_args_kwargs(f.func.__code__) == count_partial_args(f)
 
-        return pipe(
+        return pipe[Callable](
             lambda f: partial(f, *args, **kwargs),
             lambda f: apply_defaults(f) if ... in args else f,
             lambda f: f() if is_base_case(f) else curry(f)
