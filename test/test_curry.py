@@ -25,7 +25,7 @@ def test_curry():
     assert sum_all(1)(2)(...) == 6
     assert sum_all(1)(...)(2) == 6
     assert sum_all(...)(1)(2) == 6
-    
+
     assert sum_all(1, 2)(...) == 6
     assert sum_all(...)(1, 2) == 6
 
