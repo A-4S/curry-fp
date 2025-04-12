@@ -1,7 +1,9 @@
+from collections.abc import Callable
 from functools import partial
 from inspect import BoundArguments, signature
-from typing import Callable, Union, Any
 from types import CodeType
+from typing import Any, Union
+
 from pipe_fp import pipe
 
 
