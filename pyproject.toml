@@ -1,6 +1,6 @@
 [project]
 name = "curry-fp"
-version = "1.3.2"
+version = "1.3.3"
 description = "Functional currying in Python. 🥘"
 license = "MIT"
 authors = [

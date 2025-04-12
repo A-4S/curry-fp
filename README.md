@@ -27,32 +27,32 @@ def sum_all(a: int, b: int=2, c: int=3) -> int:
 ```
 **Without using default values**
 ```python
-sum_all(1)(2)(3)
->>> 6
+>>> sum_all(1)(2)(3)
+6
 ```
 
 **Using default values**
 ```python
-sum_all(1)(...)
->>> 6
+>>> sum_all(1)(...)
+6
 ```
 
 **All arguments at once**
 ```python
-sum_all(1, 2, 3)
->>> 6
+>>> sum_all(1, 2, 3)
+6
 ```
 
 **All arguments at once (with defaults)**
 ```python
-sum_all(1, 2, ...)
->>> 6
+>>> sum_all(1, 2, ...)
+6
 ```
 
 **Using keyword arguments in any order**
 ```python
-sum_all(b=2)(c=3)(a=1)
->>> 6
+>>> sum_all(b=2)(c=3)(a=1)
+6
 ```
 
 See ```test/test_curry.py``` for more examples. ✨
