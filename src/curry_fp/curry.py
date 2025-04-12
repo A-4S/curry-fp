@@ -1,7 +1,9 @@
+from collections.abc import Callable
 from functools import partial
 from inspect import BoundArguments, signature
-from typing import Callable, Union, Any
 from types import CodeType
+from typing import Any, Union
+
 from pipe_fp import pipe
 
 
@@ -14,7 +16,7 @@ def curry(f: Union[Callable, partial]):
     .. code-block:: python
         @curry
         def sum_all(a: int, b: int=2, c: int=3) -> int:
-            return a + b + c       
+            return a + b + c
 
     **Without using default values**
     >>> sum_all(1)(2)(3)
@@ -27,7 +29,7 @@ def curry(f: Union[Callable, partial]):
 
     def count_partial_args(f: partial):
         return len(f.args) + len(f.keywords)
-    
+
     def count_co_args_kwargs(co: CodeType):
         return co.co_argcount + co.co_kwonlyargcount
 
@@ -47,10 +49,10 @@ def curry(f: Union[Callable, partial]):
         def is_base_case(f: partial):
             return count_co_args_kwargs(f.func.__code__) == count_partial_args(f)
 
-        return pipe(
+        return pipe[Callable](
             lambda f: partial(f, *args, **kwargs),
             lambda f: apply_defaults(f) if ... in args else f,
-            lambda f: f() if is_base_case(f) else curry(f)
+            lambda f: f() if is_base_case(f) else curry(f),
         )(f)
 
     return wrapper
